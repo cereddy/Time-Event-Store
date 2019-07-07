@@ -142,7 +142,7 @@ class EventStoreNoSql(EventStoreAbstract):
 
         self.eventCollection.insert_one(obj)
 
-    def getEvents(self, fromTime=None, toTime=None, otherQueries=[], inListForm=False,
+    def getEvents(self, fromTime=None, toTime=None, otherQueries=[], inListForm=True,
                   orderBy=None, ascending=True):
         """
         retrieve events from store

@@ -8,13 +8,14 @@ from eventStore import EventStore
 
 class TestStore(unittest.TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         store = EventStore()
         # clear the store
         collection = store.actualStore.eventCollection
 
         collection.drop()
-        self.store = store
+        cls.store = store
 
     def test_set_get(self):
 
@@ -35,12 +36,12 @@ class TestStore(unittest.TestCase):
         self.store.setEvent(at=date3, event="third event", level="ERROR", tag="WEB")
 
         # test query by time
-        res = self.store.getEvents(fromTime=date1a, inListForm=True)
+        res = self.store.getEvents(fromTime=date1a)
         self.assertTrue(isinstance(res, list))
         self.assertTrue(len(res)==3)
         
         # test query by time
-        res = self.store.getEvents(fromTime=date1b, toTime=date2b, inListForm=True)
+        res = self.store.getEvents(fromTime=date1b, toTime=date2b)
         self.assertTrue(len(res)==1)
         evt1 = res[0]
         self.assertTrue(evt1['time'] == date2)
@@ -48,7 +49,7 @@ class TestStore(unittest.TestCase):
         self.assertTrue(evt1['level'] == "WARNING")
         
         # test query by other fields
-        res = self.store.getEvents(otherQueries=[{'level': 'ERROR'}], inListForm=True)
+        res = self.store.getEvents(otherQueries=[{'level': 'ERROR'}])
         self.assertTrue(len(res)==1)
         evt1 = res[0]
         self.assertTrue(evt1['time'] == date3)
@@ -56,16 +57,26 @@ class TestStore(unittest.TestCase):
         self.assertTrue('tag' in list(evt1.keys()))
         self.assertTrue(evt1['tag'] == "WEB")
 
-    def test_read_only_mode(self):
-        pass
-    
+    def test_set_read_only_mode(self):
+        self.store.resetStore()
+        self.store = EventStore(readOnly=True)
+        dateAux = datetime(year=1999,month=12, day=10)
+        dateAuxb = datetime(year=1999,month=12, day=11)
+        with self.assertRaises(PermissionError):
+            self.store.setEvent(at=dateAux, event="another event")
+        
+        res = self.store.getEvents(toTime=dateAuxb)
+        self.assertTrue(len(res)==0)
+
+        self.store.resetStore()
+        self.store = EventStore()
+
+
     def test_time_zone(self):
         pass
 
     def testRegexClassif(self):
         pass
-
-#res2 = sta.getEvents(toTime=datetime.now(), otherQueries=[{"level": "CRITIC"}], inListForm=True)
 
 
 if __name__ == "__main__":
