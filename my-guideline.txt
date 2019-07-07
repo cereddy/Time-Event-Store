@@ -1,0 +1,48 @@
+
+
+Fonctionnalités :
+possibilité d'affichage/diposition par ordre croissant/decroissant,
+possibilité de rendre une vue (résultat mis à jour selon les derniers ajouts) ou un resultat statique
+possibilité d'exporter le resultat dans un format (csv, json, html)
+possibilité d'effectuer un filtrage supplémentaire : quelle moyen
+permettrait de faire cela de la manière la plus efficace
+mise en place de préfiltre pour faciliter le filtrage des evenements lors des requêtes
+Ajouter un champ "niveau" à l'entrée du filtre pour catégoriser les evenements, la catégorisation peut
+se faire via une regex
+
+prise en compte des fuseaux horaires, ou d'un serveur pour définir la date
+
+possibilité de définir une requête en cas de store préexistant (type de requête mongodb par exemple) 
+
+caractéristique du store,
+permettre d'acceder à de multiple store d'evenements
+
+store sql : provide a table , retrieve the tables spec, and use it to return a custom exception
+store nosql : provide a route, db, and collection
+store csv : provide a config file (and default is something like line: date: event)
+
+Possibilité de retriever des données issues de differente sources, quel interet ?
+
+performence
+
+Concurrence :
+
+garder quelque part la liste des vues actives, pour envoyer des evenements qui match la requête
+
+Utilisation de workers celery ? et d'une queue redis pour le post de nouveausx evenements
+
+memcache ?
+
+hypothèse possible : les nouveaux evenements ont des dates proches de la date courantes 
+
+en mode view : updater la liste, le resultat est un curseur (generateur)
+
+
+
+Améliorations: 
+Ajouter logging
+Mettre en place un task manager pour scalabilité des ajouts
+Faciliter la configuration des nodes de replication (redondance en cas de soucis sur une base)
+Ajouter une vue dynamique d'une requpete (mise a jour recurrent)
+
+Ajouter rapport coverage
