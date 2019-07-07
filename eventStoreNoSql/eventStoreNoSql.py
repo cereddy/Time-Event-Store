@@ -95,7 +95,8 @@ class EventStoreNoSql(EventStoreAbstract):
 
         self.regexClassif = regexClassif
 
-        self.eventCollection.create_index([('time', ASCENDING)])
+        # still an issue here to debug
+        #self.eventCollection.create_index([('time', ASCENDING)])
         EventStoreNoSql.storeIsSet = True
 
     def clearAllEvents(self):
